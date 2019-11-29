@@ -28,3 +28,10 @@
 @property(nonatomic, strong) _QMUITransitionNavigationBar *transitionNavigationBar;
 
 @end
+
+@interface UIViewController (NavigationBarTransition)
+
+/// 用来模仿真的navBar的，在转场过程中存在的一条假navBar
+@property(nonatomic, strong) _QMUITransitionNavigationBar *transitionNavigationBar;
+
+@end
