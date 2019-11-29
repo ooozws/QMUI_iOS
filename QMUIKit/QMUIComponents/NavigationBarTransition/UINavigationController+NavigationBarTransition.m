@@ -26,10 +26,6 @@
 #import "UIView+QMUI.h"
 #import "QMUILog.h"
 
-@interface _QMUITransitionNavigationBar : UINavigationBar
-
-@end
-
 @implementation _QMUITransitionNavigationBar
 
 - (void)layoutSubviews {
