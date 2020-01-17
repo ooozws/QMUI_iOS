@@ -110,13 +110,6 @@ static BOOL QMUI_hasAppliedInitialTemplate;
         }
     }
     
-    if (IS_DEBUG && self.sendAnalyticsToQMUITeam) {
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue new] usingBlock:^(NSNotification * _Nonnull note) {
-            // 这里根据是否能成功获取到 classesref 来统计信息，以供后续确认对 classesref 为 nil 的保护是否真的必要
-            [self sendAnalyticsWithQuery:classes ? @"findByObjc=true" : nil];
-        }];
-    }
-    
     if (classes) free(classes);
     
     QMUI_hasAppliedInitialTemplate = YES;
