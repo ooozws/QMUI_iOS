@@ -112,7 +112,7 @@ QMUISynthesizeIdCopyProperty(qmui_prefersHomeIndicatorAutoHiddenBlock, setQmui_p
                                 }
                             }
 
-                            CGRect barRectInTabBarController = [tabBar convertRect:tabBar.bounds toView:tabBarController.view];
+                            CGRect barRectInTabBarController = tabBar.window ? [tabBar convertRect:tabBar.bounds toView:tabBarController.view] : tabBar.frame;
                             CGFloat correctInsetBottom = MAX(CGRectGetMaxY(viewRectInTabBarController) - CGRectGetMinY(barRectInTabBarController), 0);
                             insets.bottom = correctInsetBottom;
                         }
