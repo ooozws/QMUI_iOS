@@ -479,7 +479,22 @@
     self.appearCompletionBlock = completion;
     self.previousKeyWindow = UIApplication.sharedApplication.keyWindow;
     if (!self.containerWindow) {
-        self.containerWindow = [[QMUIModalPresentationWindow alloc] init];
+         // 暂时解决在ios13中使用windowScene导致的问题
+        if (@available(iOS 13.0, *)) {
+            UIWindowScene *windowScene;
+            for (UIWindowScene *scene in UIApplication.sharedApplication.connectedScenes) {
+                if (scene.activationState ==  UISceneActivationStateForegroundActive) {
+                     windowScene = scene;
+                }
+            }
+            if (windowScene) {
+                self.containerWindow = [[QMUIModalPresentationWindow alloc] initWithWindowScene:windowScene];
+            } else {
+                self.containerWindow = [[QMUIModalPresentationWindow alloc] init];
+            }
+        } else {
+            self.containerWindow = [[QMUIModalPresentationWindow alloc] init];
+        }
         self.containerWindow.windowLevel = UIWindowLevelQMUIAlertView;
         self.containerWindow.backgroundColor = UIColorClear;// 避免横竖屏旋转时出现黑色
         [self updateContainerWindowStatusBarCapture];
