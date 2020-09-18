@@ -33,6 +33,31 @@
 
 @implementation _QMUITransitionNavigationBar
 
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // iOS 14 开启 customNavigationBarTransitionKey 的情况下转场效果错误
+        // https://github.com/Tencent/QMUI_iOS/issues/1081
+        if (@available(iOS 14.0, *)) {
+            OverrideImplementation([_QMUITransitionNavigationBar class], NSSelectorFromString([NSString stringWithFormat:@"_%@_%@", @"accessibility", @"navigationController"]), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                return ^UINavigationController *(_QMUITransitionNavigationBar *selfObject) {
+                    if (selfObject.originalNavigationBar) {
+                        BeginIgnorePerformSelectorLeaksWarning
+                        return [selfObject.originalNavigationBar performSelector:originCMD];
+                        EndIgnorePerformSelectorLeaksWarning
+                    }
+                    
+                    // call super
+                    UINavigationController *(*originSelectorIMP)(id, SEL);
+                    originSelectorIMP = (UINavigationController *(*)(id, SEL))originalIMPProvider();
+                    UINavigationController *result = originSelectorIMP(selfObject, originCMD);
+                    return result;
+                };
+            });
+        }
+    });
+}
+
 - (void)setOriginalNavigationBar:(UINavigationBar *)originBar {
     _originalNavigationBar = originBar;
     
