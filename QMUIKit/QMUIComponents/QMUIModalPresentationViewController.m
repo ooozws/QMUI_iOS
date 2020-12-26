@@ -480,7 +480,7 @@
     self.appearCompletionBlock = completion;
     self.previousKeyWindow = UIApplication.sharedApplication.keyWindow;
     if (!self.containerWindow) {
-             // 暂时解决在ios13中使用windowScene导致的问题
+        // 暂时解决在ios13中使用windowScene导致的问题
         if (@available(iOS 13.0, *)) {
             UIWindowScene *windowScene;
             for (UIWindowScene *scene in UIApplication.sharedApplication.connectedScenes) {

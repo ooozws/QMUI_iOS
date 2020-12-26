@@ -675,7 +675,22 @@
 
 - (void)initPopupContainerViewWindowIfNeeded {
     if (!self.popupWindow) {
-        self.popupWindow = [[QMUIPopupContainerViewWindow alloc] init];
+        // 暂时解决在ios13中使用windowScene导致的问题
+        if (@available(iOS 13.0, *)) {
+            UIWindowScene *windowScene;
+            for (UIWindowScene *scene in UIApplication.sharedApplication.connectedScenes) {
+                if (scene.activationState ==  UISceneActivationStateForegroundActive) {
+                     windowScene = scene;
+                }
+            }
+            if (windowScene) {
+                self.popupWindow = [[QMUIPopupContainerViewWindow alloc] initWithWindowScene:windowScene];
+            } else {
+                self.popupWindow = [[QMUIPopupContainerViewWindow alloc] init];
+            }
+        } else {
+            self.popupWindow = [[QMUIPopupContainerViewWindow alloc] init];
+        }
         self.popupWindow.qmui_capturesStatusBarAppearance = NO;
         self.popupWindow.backgroundColor = UIColorClear;
         self.popupWindow.windowLevel = UIWindowLevelQMUIAlertView;
